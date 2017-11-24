@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>What Pokemon</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+
+        for(var i = 1; i < 152; i++){
+            $('#images').append("<img id="+i+" src='http://pokeapi.co/media/img/"+i+".png' alt='pix'>");
+        };
+
+        $('img').on('click', function(event){
+            $(this).off(event);
+            
+            $('#details').empty();
+
+            var imgUrl = $(this).attr('src');
+            var typelist = "";
+            var getId = $(this).attr('id');
+            
+            $.get('https://pokeapi.co/api/v2/pokemon/'+getId+'/',function(data){
+
+                for(var i = 0; i < data.types.length; i++){
+                    typelist = typelist+"<li>"+data.types[i].type.name+"</li>";
+                }
+
+                $('#details').append('<h1>'+data.name+'</h1><img class=pic id='+getId+' src="'+imgUrl+'" alt="pix"><h3>Types</h3><ul>'+typelist+'</ul><h3>Height</h3><p>'+data.height+'</p><h3>Weight</h3><p>'+data.weight+'</p>');
+                },'json');
+        });
+    });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="images">
+        </div><!-- end of images div -->
+        <div id="details">
+        </div><!-- end of details div -->
+    </div><!-- end of wrapper div-->
+</body>
+</html>
